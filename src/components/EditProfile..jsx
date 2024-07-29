@@ -8,7 +8,7 @@ import '../App.css'
 
 
 
-const Register = () => {
+const EditProfile = () => {
     const [firstname, setFirstname] = useState('');
     const [lastname, setLastname] = useState('');
     const [email, setEmail] = useState('');
@@ -21,22 +21,22 @@ const Register = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        axios.post("http://localhost:8000/api/register/", { firstname, lastname, email, phonenumber, password, confirmpassword })
+        axios.put("http://localhost:8000/api/profile", { firstname, lastname, email, phonenumber, password, confirmpassword })
             .then(res => {
                 console.log(res.data);
                 setFirstname('');
                 setLastname('');
                 setEmail('');
+                setPhonenumber('');
                 setPassword('');
                 setConfirmpassword('');
-                setPhonenumber('');
-                navigate('/Login');
+                navigate('/HomePage');
             })
             .catch(err => {
                 const errorResponse = err.response?.data?.errors || {};
                 const errorArr = Object.values(errorResponse).map(error => error.message);
                 setError(errorArr);
-            })
+            });
     };
 
     return (
@@ -73,11 +73,8 @@ const Register = () => {
                                         <label htmlFor="confirm-password">Confirm PW:</label>
                                         <input type="password" className="form-control" id="confirm-password" name="confirm-password" value={confirmpassword} onChange={(e) => setConfirmpassword(e.target.value)} />
                                     </div>
-                                    <button type="submit" className="btn btn-custom_sub btn-block w-100">Submit</button>
-                                    <button type="button" className="btn btn-custom_g btn-block w-100 mt-2">
-                                        <img src="/icons/google.png" alt="Icon" width="20" className="mr-2" />
-                                        Register with Google
-                                    </button>
+                                    <button type="submit" className="btn btn-custom_sub btn-block w-100">Save Changes</button>
+                                    <button type="button" className="btn btn-custom_g btn-block w-100 mt-2">Cancel</button>
                                 </form>
                                 {error && <div className="alert alert-danger mt-3">{error.join(', ')}</div>}
                             </div>
@@ -90,4 +87,4 @@ const Register = () => {
     );
 }
 
-export default Register;
+export default EditProfile;
